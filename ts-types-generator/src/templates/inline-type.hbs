@@ -1,0 +1,53 @@
+{{~#equals modelType 'primitive'~}}
+  {{~#if enum~}}
+    {{~name~}}
+  {{~else~}}
+    {{~#equals type 'string'~}}
+      {{~#equals format 'date'~}}
+        Date
+      {{~else~}}
+        {{~#equals format 'date-time'~}}
+          Date
+        {{~else~}}
+          {{~#equals format 'binary'~}}
+            Buffer
+          {{~else~}}
+            {{type}}
+          {{~/equals~}}
+        {{~/equals~}}
+      {{~/equals~}}
+    {{~else~}}
+      {{~#equals type 'integer'~}}
+        number
+      {{~else~}}
+        {{type}}
+      {{~/equals~}}
+    {{~/equals~}}    
+  {{~/if~}}
+{{~/equals~}}
+{{~#equals modelType 'array'~}}
+  {{~#if items~}}
+    Array<{{~>inline-type items~}}>
+  {{~else~}}
+    Array<any>
+  {{~/if~}}
+{{~/equals~}}
+{{~#equals modelType 'object'~}}
+  {{~#if isDictionary~}}
+    {{~#if additionalProperties~}}
+        Dict<{{>inline-type additionalProperties}}>
+      {{~else~}}
+        Dict<any>
+    {{~/if~}}
+  {{~else~}}
+    {{~#if composition~}}
+      {{>inline-type composition}}
+    {{~else~}}
+      {{~name~}}
+    {{~/if~}}
+  {{~/if~}}
+{{~/equals~}}
+{{~#equals modelType 'composition'~}}
+  {{~name~}}
+{{~/equals~}}
+{{#if nullable}} | null{{/if}}
